@@ -1,8 +1,15 @@
 @import "base/variables";
 
 // foundation
-@import "base/foundation-settings";
-@import "foundation";
-@include foundation-everything;
+//@import "base/foundation-settings";
+//@import "foundation";
+//@include foundation-everything;
+
+@import "bootstrap.min.css";
+@import "custom";
 
 // Components
+@import "components/main";
+@import "components/Nav";
+@import "components/Head";
+@import "components/Dashboard";

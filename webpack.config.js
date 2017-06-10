@@ -22,6 +22,11 @@ module.exports = {
   },
   resolve: {
     root: __dirname,
+    modulesDirectories: [
+      'node_modules',
+      './app/components',
+      './app/api'
+    ],
     alias: {
       applicationStyles: 'app/styles/app.scss'
     },
@@ -41,7 +46,7 @@ module.exports = {
   },
   sassLoader: {
     includePaths: [
-      path.resolve(__dirname, './node_modules/foundation-sites/scss')
+      path.resolve(__dirname, './node_modules/bootstrap/scss')
     ]
   },
   devtool: 'cheap-module-eval-source-map'

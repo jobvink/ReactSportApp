@@ -1,0 +1,39 @@
+.sport_nav {
+  padding: 0;
+  text-align: center;
+
+  .sidebar-header {
+    margin-bottom: 2rem;
+    border-bottom: solid 1px #46688a;
+  }
+
+
+  ul {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+
+  a {
+    width: 100%;
+    padding: 0 1.5rem;
+    border: solid 1px #46688a;
+  }
+
+  a:hover {
+    background-color: #46688a;
+    cursor: pointer;
+  }
+
+  li {
+    display: flex !important;
+    justify-content: space-between;
+    font-size: 1.6rem;
+    align-items: center;
+    margin: 0.5rem 0;
+  }
+
+}
+
+.sport_active {
+  background-color: #46688a;
+}
