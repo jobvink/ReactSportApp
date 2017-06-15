@@ -33,7 +33,7 @@ export var Chart = React.createClass({
 					borderWidth: 1,
 					color: '#fff'
 				},
-				colors: [...that.props.chartcolors],
+				colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)", "rgba(3, 45, 56, 0.38)"],
 				xaxis: {
 					tickColor: "rgba(51, 51, 51, 0.06)",
 					mode: "time",
@@ -55,33 +55,27 @@ export var Chart = React.createClass({
 	},
 	renderLegenda: function (legenda, colors) {
 		var newLegenda = [];
+		var iter = 0;
 		for (var i = 0; i < legenda.length; i++) {
-			newLegenda.push(<li><span style={{background: colors[i]}}></span><p>{legenda[i]}</p></li>)
+			newLegenda.push(<li key={iter++}><span key={iter++} style={{background: colors[i]}}></span><p key={iter++}>{legenda[i]}</p></li>)
 		}
 		return newLegenda;
 	},
 	render: function () {
 		return (
-			<div className="dashboard_graph sport_dashboard">
-				<div className="row x_title">
-					<div className="col-md-12">
-						<h3>Hardloop activiteit <small>laatste 3 maanden</small></h3>
-					</div>
-				</div>
-				<div className="col-md-10 col-sm-10 col-xs-10">
-					<div>
-						<div id="canvas_dahs" className="demo-placeholder"></div>
-					</div>
-				</div>
-				<div className="col-md-2 col-sm-2 col-xs-2 sport_dashboard_legenda">
-					<h3>Legenda</h3>
-					<ul>
-						{this.renderLegenda(this.props.chartlegenda, this.props.chartcolors)}
-					</ul>
-
-				</div>
-				<div className="clearfix"></div>
-			</div>
+            <div className="sport_graph sport_dashboard">
+                <div className="col-md-10 col-sm-10 col-xs-10">
+                    <div>
+                        <div id="canvas_dahs" className="demo-placeholder"></div>
+                    </div>
+                </div>
+                <div className="col-md-2 col-sm-2 col-xs-2 sport_dashboard_legenda">
+                    <h3>Legenda</h3>
+                    <ul>
+                        {this.renderLegenda(this.props.chartlegenda, ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)", "rgba(3, 45, 56, 0.38)"])}
+                    </ul>
+                </div>
+            </div>
 		);
 	}
 });
