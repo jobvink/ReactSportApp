@@ -1,6 +1,5 @@
 var React = require('react');
 var {Link} = require('react-router');
-var {DropdownButton, MenuItem} = require('react-bootstrap');
 
 export var Head = React.createClass({
 	render: function () {
