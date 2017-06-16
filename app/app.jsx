@@ -91,7 +91,7 @@ var agenda = [
 
 store.dispatch(actions.setHardloopData(data));
 store.dispatch(actions.addAgendas(agenda));
-store.dispatch(actions.setHardloopState('started'));
+store.dispatch(actions.setHardloopState('stopped'));
 
 // App css
 require('style!css!sass!applicationStyles');
