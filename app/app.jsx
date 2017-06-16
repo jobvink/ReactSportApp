@@ -88,23 +88,8 @@ function gd(year, month, day) {
     return new Date(year, month - 1, day).getTime();
 }
 
-var agenda = [
-    {
-        datum: new Date("2017-01-01T11:30"),
-        actie: 'Hardlopen'
-    },
-    {
-        datum: new Date("2017-01-03T21:30"),
-        actie: 'Sportschool'
-    },
-    {
-        datum: new Date("2017-01-05T14:30"),
-        actie: 'Hardlopen'
-    },
-];
-
+store.dispatch(actions.addSchema('Test schema'));
 store.dispatch(actions.setHardloopData(data));
-store.dispatch(actions.addAgendas(agenda));
 store.dispatch(actions.setHardloopState('stopped'));
 store.dispatch(actions.setCount(0));
 

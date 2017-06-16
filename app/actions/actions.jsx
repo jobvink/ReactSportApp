@@ -1,3 +1,5 @@
+var uuid = require('node-uuid');
+
 export var setHardloopData = (data) => {
     return {
         type: 'SET_HARDLOOP_DATA',
@@ -32,16 +34,26 @@ export var clearCount = () => {
     }
 };
 
-export var addAgenda = (agenda) => {
+export var addAgenda = (id, agenda) => {
     return {
         type: 'ADD_AGENDA',
+        id,
         agenda
     }
 };
 
-export var addAgendas = (agendas) => {
+export var addAgendas = (id, agendas) => {
     return {
         type: 'ADD_AGENDAS',
+        id,
         agendas
+    }
+};
+
+export var addSchema = (naam) => {
+    return {
+        type: 'ADD_SCHEMA',
+        id: uuid(),
+        naam
     }
 };

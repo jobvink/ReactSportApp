@@ -1,3 +1,4 @@
+
 export var hardloopDataReducer = (state = [], action) => {
     switch (action.type) {
         case 'SET_HARDLOOP_DATA':
@@ -34,17 +35,44 @@ export var currCountReducer = (state = 0, action) => {
     }
 };
 
-export var agendaReducer = (state = [], action) => {
+export var schemaReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD_AGENDA':
-            return [
-                ...state,
-                action.agenda
-            ];
+            return state.map((s) => {
+                if (s.id === action.id) {
+                    return {
+                        ...s,
+                        agenda: [
+                            ...s.agenda,
+                            action.agenda
+                        ]
+                    }
+                } else {
+                    return s
+                }
+            });
         case 'ADD_AGENDAS':
+            return state.map((s) => {
+                if (s.id === action.id) {
+                    return {
+                        ...s,
+                        agenda: [
+                            ...s.agenda,
+                            ...action.agendas
+                        ]
+                    }
+                } else {
+                    return s
+                }
+            });
+        case 'ADD_SCHEMA':
             return [
                 ...state,
-                ...action.agendas
+                {
+                    id: action.id,
+                    name: action.naam,
+                    agenda: []
+                }
             ];
         default:
             return state
