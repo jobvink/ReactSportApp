@@ -19,6 +19,19 @@ export var setHardloopState = (state) => {
     }
 };
 
+export var setCount = (count) => {
+    return {
+        type: 'SET_COUNT',
+        count
+    }
+};
+
+export var clearCount = () => {
+    return {
+        type: 'CLEAR_COUNT'
+    }
+};
+
 export var addAgenda = (agenda) => {
     return {
         type: 'ADD_AGENDA',

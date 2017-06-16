@@ -23,6 +23,17 @@ export var hardloopStateReducer = (state = '', action) => {
     }
 };
 
+export var currCountReducer = (state = 0, action) => {
+    switch (action.type) {
+        case 'SET_COUNT':
+            return action.count;
+        case 'CLEAR_COUNT':
+            return 0;
+        default:
+            return state
+    }
+};
+
 export var agendaReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD_AGENDA':

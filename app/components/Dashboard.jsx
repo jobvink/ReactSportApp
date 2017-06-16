@@ -16,12 +16,9 @@ var Dashboard = React.createClass({
 		});
 
 		var arrLegenda = [];
-		laatsteDrieMaanden.forEach((maand) => {
-			arrLegenda.push(moment(maand.maand).local('nl').format('MMMM'))
-		});
-
 		var arrData = [];
 		laatsteDrieMaanden.forEach((maand) => {
+			arrLegenda.push(moment(maand.maand).local('nl').format('MMMM'))
 			arrData.push(maand.data);
 		});
 
