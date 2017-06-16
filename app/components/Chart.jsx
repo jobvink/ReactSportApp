@@ -40,7 +40,7 @@ export var Chart = React.createClass({
 					tickSize: [1, "day"],
 					//tickLength: 10,
 					axisLabel: "Date",
-					axisLabelUseCanvas: true,
+					axisLabelUseCanvas: false,
 					axisLabelFontSizePixels: 12,
 					axisLabelFontFamily: 'Verdana, Arial',
 					axisLabelPadding: 10

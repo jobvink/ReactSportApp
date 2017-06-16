@@ -12,21 +12,37 @@ var Dashboard = React.createClass({
 		var {hardloopData, agenda} = this.props;
 
 		var laatsteDrieMaanden = hardloopData.filter((maand) => {
-			return (maand.maand > moment().startOf('month').subtract(3, 'months'))
+			return (maand.time > moment().startOf('month').subtract(2, 'months'))
 		});
 
 		var arrLegenda = [];
 		var arrData = [];
 		laatsteDrieMaanden.forEach((maand) => {
-			arrLegenda.push(moment(maand.maand).local('nl').format('MMMM'))
-			arrData.push(maand.data);
+			arrLegenda.push(maand.time.local('nl').format('MMMM'));
+			arrData.push([maand.time.toDate().getTime(), maand.data]);
+		});
+
+		var data = [];
+		for (let i = 0; i <= 2; i++){
+		    let month = [];
+		    arrData.forEach((val) => {
+		        if (val[0] > moment().startOf('month').subtract(i, 'months').toDate().getTime()) {
+		            month.push(val);
+                }
+            });
+            data.push(month);
+        }
+
+
+		var uniqueLegenda = arrLegenda.filter((value, index, self) => {
+            return self.indexOf(value) === index;
 		});
 
 		return (
 			<div>
 				<Page title="Dashboard">
 					<Panel largeTitle="Hardloop activiteit" smallTitle="laatste 3 maanden">
-						<Chart chartdata={arrData} chartlegenda={arrLegenda}/>
+						<Chart chartdata={data} chartlegenda={uniqueLegenda}/>
 					</Panel>
 					<Panel largeTitle="Aankomende sport activiteit" smallTitle="1 week vooruit">
 						<Table actie="Soort" data={agenda}/>

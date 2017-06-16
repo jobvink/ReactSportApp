@@ -22,8 +22,13 @@
       height: 20px;
     }
   }
+
+  .flot-x-axis > .flot-tick-label {
+     color:transparent !important;
+   }
 }
 
 .dashboard_item {
   padding: 7px 10px;
 }
+

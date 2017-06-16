@@ -1,6 +1,7 @@
 var React = require('react');
 var actions = require('actions');
 var {connect} = require('react-redux');
+var moment = require('moment');
 
 import Controls from 'Controls'
 import Clock from 'Clock';
@@ -13,9 +14,12 @@ var Timer = React.createClass({
                     this.handleStart();
                     break;
                 case 'stopped':
-                    this.setState({
-                        count: 0
-                    });
+                    var {dispatch} = this.props;
+                    dispatch(actions.addHardloopData({
+                        time: moment(),
+                        data: this.props.currCount
+                    }));
+                    dispatch(actions.clearCount());
                 case 'paused':
                     clearInterval(this.timer);
                     this.timer = undefined;

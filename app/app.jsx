@@ -68,7 +68,21 @@ var data5 = {
     ]
 };
 
-var data = [data1, data2, data3, data4, data5];
+var testData = [data1, data2, data3, data4, data5];
+console.log(testData);
+
+
+var data = [];
+for (let i = 0; i < 50; i++) {
+    data.push({
+        time: moment().subtract(5, 'months').add(i*3, 'days'),
+        data: getRandomArbitrary(10, 55)
+    });
+}
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 function gd(year, month, day) {
     return new Date(year, month - 1, day).getTime();
