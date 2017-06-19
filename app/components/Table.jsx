@@ -30,7 +30,7 @@ export var Table = React.createClass({
                     <tr>
                         <th>Datum</th>
                         <th>Tijd</th>
-                        <th>{this.props.actie}</th>
+                        <th>Activiteit</th>
                     </tr>
                 </thead>
                 {this.renderTableBody()}

@@ -6,7 +6,7 @@ import Main from 'Main';
 import Dashboard from 'Dashboard';
 import Schema from 'Schema';
 import Hardlopen from 'Hardlopen';
-import Account from 'Account';
+import Profile from 'Profile';
 
 // var requireLogin = (nextState, replace, next) => {
 //     if (!firebase.auth().currentUser) {
@@ -30,7 +30,7 @@ export default (
             <IndexRoute component={Dashboard}/>
             <Route path="schema" component={Schema}/>
             <Route path="hardlopen" component={Hardlopen}/>
-            <Route path="acount" component={Account}/>
+            <Route path="profile" component={Profile}/>
         </Route>
     </Router>
 );

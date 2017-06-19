@@ -9,7 +9,7 @@ import Panel from 'Panel';
 
 var Dashboard = React.createClass({
 	render: function () {
-		var {hardloopData, agenda} = this.props;
+		var {hardloopData, schema} = this.props;
 
 		var laatsteDrieMaanden = hardloopData.filter((maand) => {
 			return (maand.time > moment().startOf('month').subtract(2, 'months'))
@@ -33,6 +33,19 @@ var Dashboard = React.createClass({
             data.push(month);
         }
 
+        var arrSchema = [];
+
+        if (schema.length > 0) {
+            schema.forEach((s) => {
+                s.agenda.forEach((a) => {
+                    let maandVanNu = moment().add(1, 'months').toDate();
+                    let datum = new Date(a.datum).getTime();
+                    if (maandVanNu > datum && datum > new Date()) {
+                        arrSchema.push(a);
+                    }
+                })
+            });
+        }
 
 		var uniqueLegenda = arrLegenda.filter((value, index, self) => {
             return self.indexOf(value) === index;
@@ -44,8 +57,8 @@ var Dashboard = React.createClass({
 					<Panel largeTitle="Hardloop activiteit" smallTitle="laatste 3 maanden">
 						<Chart chartdata={data} chartlegenda={uniqueLegenda}/>
 					</Panel>
-					<Panel largeTitle="Aankomende sport activiteit" smallTitle="1 week vooruit">
-						<Table actie="Soort" data={agenda}/>
+					<Panel largeTitle="Aankomende sport activiteit" smallTitle="1 maand vooruit">
+						<Table data={arrSchema}/>
 					</Panel>
 				</Page>
 			</div>
@@ -55,6 +68,9 @@ var Dashboard = React.createClass({
 
 export default connect(
 	(state) => {
-		return state;
+		return {
+		    hardloopData: state.hardloopData,
+            schema: state.schema
+        };
 	}
 )(Dashboard);

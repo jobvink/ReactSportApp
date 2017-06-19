@@ -9,7 +9,7 @@ export var Head = React.createClass({
 					<h1>Sport App</h1>
 				</div>
 				<div className="head_links">
-					<Link to="/account" >account</Link>
+					<Link to="/profile" >account</Link>
 					<Link to="/logout">logout</Link>
 				</div>
 

@@ -57,3 +57,31 @@ export var addSchema = (naam) => {
         naam
     }
 };
+
+export var addTrophy = (title, description, id) => {
+    return {
+        type: 'ADD_TROPHY',
+        title,
+        description,
+        id
+    }
+};
+
+export var setFinished = (id) => {
+    return {
+        type: 'SET_FINISHED',
+        id
+    }
+};
+
+
+export var configureProfile = (imgPath, naam, geboortedatum, woonplaats, werk) => {
+    return {
+        type: 'CONFIGURE_PROFILE',
+        imgPath,
+        naam,
+        geboortedatum,
+        woonplaats,
+        werk
+    }
+};

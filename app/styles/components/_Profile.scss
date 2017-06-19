@@ -1,0 +1,21 @@
+#profile_page {
+  td {
+    padding-left: 10px;
+  }
+
+  #achievements_wrapper {
+    margin-top: 2rem !important;
+  }
+
+  #achievements {
+
+    text-align: center;
+    i {
+      font-size: 5rem;
+    }
+
+    .finished {
+      color: #26B99A;
+    }
+  }
+}

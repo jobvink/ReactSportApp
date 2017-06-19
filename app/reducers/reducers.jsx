@@ -1,3 +1,4 @@
+var uuid = require('node-uuid');
 
 export var hardloopDataReducer = (state = [], action) => {
     switch (action.type) {
@@ -74,6 +75,49 @@ export var schemaReducer = (state = [], action) => {
                     agenda: []
                 }
             ];
+        default:
+            return state
+    }
+};
+
+export var trophyReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_TROPHY':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    title: action.title,
+                    description: action.description,
+                    finished: false
+                }
+            ];
+        case 'SET_FINISHED':
+            return state.map((trophy) => {
+                if (trophy.id === action.id) {
+                    return {
+                        ...trophy,
+                        finished: true
+                    }
+                } else {
+                    return trophy
+                }
+            });
+        default:
+            return state
+    }
+};
+
+export var profileReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'CONFIGURE_PROFILE':
+            return {
+                imgPath: action.import,
+                naam: action.naam,
+                geboortedatum: action.geboortedatum,
+                woonplaats: action.woonplaats,
+                werk: action.werk
+            };
         default:
             return state
     }

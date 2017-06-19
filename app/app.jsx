@@ -9,67 +9,86 @@ var store = require('configureStore').configure();
 import router from 'app/router/';
 var moment = require('moment');
 
+var {trophys} = require('app/trophy');
 
-var data1 = {
-    maand: moment().startOf('month').subtract(4, 'months'),
-    data: [
-        [gd(2017, 1, 1), 17],
-        [gd(2017, 1, 2), 74],
-        [gd(2017, 1, 3), 6],
-        [gd(2017, 1, 4), 39],
-        [gd(2017, 1, 5), 20],
-        [gd(2017, 1, 6), 85],
-    ]
-};
-var data2 = {
-    maand: moment().startOf('month').subtract(3, 'months'),
-    data: [
-        [gd(2017, 1, 1), 82],
-        [gd(2017, 1, 2), 23],
-        [gd(2017, 1, 3), 66],
-        [gd(2017, 1, 4), 9],
-        [gd(2017, 1, 6), 6],
-        [gd(2017, 1, 7), 9],
-        [gd(2017, 1, 12), 0]
-    ]
-};
-var data3 = {
-    maand: moment().startOf('month').subtract(2, 'months'),
-    data: [
-        [gd(2017, 1, 1), 43],
-        [gd(2017, 1, 2), 21],
-        [gd(2017, 1, 6), 34],
-        [gd(2017, 1, 7), 36],
-        [gd(2017, 1, 12), 0],
-    ]
-};
-var data4 = {
-    maand: moment().startOf('month').subtract(1, 'months'),
-    data: [
-        [gd(2017, 1, 1), 43],
-        [gd(2017, 1, 2), 46],
-        [gd(2017, 1, 6), 64],
-        [gd(2017, 1, 7), 55],
-        [gd(2017, 1, 8), 34],
-        [gd(2017, 1, 10), 21],
-    ]
-};
-var data5 = {
-    maand: moment().startOf('month'),
-    data: [
-        [gd(2017, 1, 1), 34],
-        [gd(2017, 1, 2), 46],
-        [gd(2017, 1, 6), 23],
-        [gd(2017, 1, 7), 45],
-        [gd(2017, 1, 8), 45],
-        [gd(2017, 1, 10), 23],
-        [gd(2017, 1, 11), 53],
-        [gd(2017, 1, 12), 0]
-    ]
+
+var checkTrophys = (userTrophys, state) => {
+    console.log('checking for trophys');
+    userTrophys.forEach((trophy) => {
+        if(!trophy.finnished) {
+            var finished = trophys[trophy.id].condition(state);
+            if(finished) {
+                unsubscribe();
+                store.dispatch(actions.setFinished(trophy.id));
+                unsubscribe = store.subscribe(trophyChecker);
+            }
+        }
+    })
 };
 
-var testData = [data1, data2, data3, data4, data5];
-console.log(testData);
+export var trophyChecker = () => {
+    var state = store.getState();
+    var userTrophys = state.trophys;
+
+    if (userTrophys.length === Object.keys(trophys).length) {
+        checkTrophys(userTrophys, state);
+    }
+};
+
+var unsubscribe = store.subscribe(trophyChecker);
+
+
+var userTrophys = store.getState().trophys;
+
+
+var addAllTrophys = function () {
+    var keys = Object.keys(trophys);
+    keys.forEach((key) => {
+        var trophy = trophys[key];
+        store.dispatch(actions.addTrophy(trophy.title, trophy.description, trophy.id));
+    })
+};
+
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+
+    var indexOf;
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+
+            var i = -1, index = -1;
+            for(i = 0; i < this.length; i++) {
+
+                var item = this[i];
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};
+
+if (userTrophys.length === 0) {
+    addAllTrophys();
+} else {
+    var keys = userTrophys.map((trophy) => {
+        return trophy.id
+    });
+    keys.forEach((key) => {
+        if (!contains.call(Object.keys(trophys), key)) {
+            var trophyToAdd = trophys[key];
+            store.dispatch(actions.addTrophy(trophyToAdd.title, trophyToAdd.description, trophyToAdd.id));
+        }
+    });
+}
 
 
 var data = [];
@@ -87,11 +106,11 @@ function getRandomArbitrary(min, max) {
 function gd(year, month, day) {
     return new Date(year, month - 1, day).getTime();
 }
-
 store.dispatch(actions.addSchema('Test schema'));
 store.dispatch(actions.setHardloopData(data));
 store.dispatch(actions.setHardloopState('stopped'));
 store.dispatch(actions.setCount(0));
+
 
 // App css
 require('style!css!sass!applicationStyles');

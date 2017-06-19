@@ -25,7 +25,7 @@ var SportSchema = React.createClass({
 
         var renderAgenda = function () {
             if(agenda.length > 0){
-                return <Table actie="Activiteit" data={agenda}/>
+                return <Table data={agenda}/>
             } else {
                 return <p>Nog geen activiteiten gepland voor deze sport</p>
             }
@@ -39,7 +39,7 @@ var SportSchema = React.createClass({
                     <input type="datetime-local" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="date" id="data" name="date" />
                     <label className="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">Activiteit:</label>
                     <input type="text" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="activiteit" id="activiteit" name="activiteit"/>
-                    <input type="submit" className="btn btn-primary"/>
+                    <input type="submit" className="btn btn-primary" style={{margin: 0}}/>
                 </form>
                 <br/>
                 {renderAgenda()}

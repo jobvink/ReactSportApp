@@ -1,14 +1,18 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
 
-import {hardloopDataReducer, schemaReducer, hardloopStateReducer, currCountReducer} from 'reducers';
+import {hardloopDataReducer, schemaReducer, hardloopStateReducer, currCountReducer, trophyReducer, profileReducer} from 'reducers';
+
+import {trophyChecker} from 'app/trophy';
 
 export var configure = (initialState = {}) => {
     let reducer = redux.combineReducers({
         hardloopData: hardloopDataReducer,
         hardloopState: hardloopStateReducer,
         currCount: currCountReducer,
-        schema: schemaReducer
+        schema: schemaReducer,
+        trophys: trophyReducer,
+        profile: profileReducer
     });
 
     return redux.createStore(reducer, initialState, redux.compose(
