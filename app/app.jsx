@@ -5,9 +5,20 @@ var {Route, Router, IndexRoute, hashHistory} = require('react-router');
 
 var actions = require('actions');
 var store = require('configureStore').configure();
-// import firebase from 'app/firebase/';
+import firebase from 'app/firebase/';
 import router from 'app/router/';
 var moment = require('moment');
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        store.dispatch(actions.login(user.uid));
+        store.dispatch(actions.startAddAllHardloopdata());
+        hashHistory.push('/');
+    } else {
+        store.dispatch(actions.logout());
+        hashHistory.push('/');
+    }
+});
 
 var {trophys} = require('app/trophy');
 
@@ -90,14 +101,13 @@ if (userTrophys.length === 0) {
     });
 }
 
-
-var data = [];
-for (let i = 0; i < 50; i++) {
-    data.push({
-        time: moment().subtract(5, 'months').add(i*3, 'days'),
-        data: getRandomArbitrary(10, 55)
-    });
-}
+// setTimeout(() => {
+// for (let i = 0; i < 50; i++) {
+//     store.dispatch(actions.startAddHardloopdata({
+//         time: moment().subtract(5, 'months').add(i*3, 'days'),
+//         data: getRandomArbitrary(10, 55)
+//     }));
+// }},1000);
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
@@ -107,7 +117,6 @@ function gd(year, month, day) {
     return new Date(year, month - 1, day).getTime();
 }
 store.dispatch(actions.addSchema('Test schema'));
-store.dispatch(actions.setHardloopData(data));
 store.dispatch(actions.setHardloopState('stopped'));
 store.dispatch(actions.setCount(0));
 

@@ -1,7 +1,14 @@
 var React = require('react');
 var {Link} = require('react-router');
+var {connect} = require('react-redux');
+var actions = require('actions');
+var Router = require('react-router');
 
 export var Head = React.createClass({
+    onLogout(e) {
+        var {dispatch} = this.props;
+        dispatch(actions.startLogout());
+    },
 	render: function () {
 		return (
 			<div className="sport_head">
@@ -10,7 +17,7 @@ export var Head = React.createClass({
 				</div>
 				<div className="head_links">
 					<Link to="/profile" >account</Link>
-					<Link to="/logout">logout</Link>
+					<a href="#/login" onClick={this.onLogout}>logout</a>
 				</div>
 
 			</div>
@@ -18,4 +25,10 @@ export var Head = React.createClass({
 	}
 });
 
-export default Head;
+export default connect(
+    (state) => {
+        return {
+            state
+        }
+    }
+)(Head);

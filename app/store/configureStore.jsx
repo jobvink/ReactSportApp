@@ -1,8 +1,6 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
-
-import {hardloopDataReducer, schemaReducer, hardloopStateReducer, currCountReducer, trophyReducer, profileReducer} from 'reducers';
-
+import {hardloopDataReducer, schemaReducer, hardloopStateReducer, currCountReducer, trophyReducer, profileReducer, authReducer} from 'reducers';
 import {trophyChecker} from 'app/trophy';
 
 export var configure = (initialState = {}) => {
@@ -12,7 +10,8 @@ export var configure = (initialState = {}) => {
         currCount: currCountReducer,
         schema: schemaReducer,
         trophys: trophyReducer,
-        profile: profileReducer
+        profile: profileReducer,
+        auth: authReducer
     });
 
     return redux.createStore(reducer, initialState, redux.compose(

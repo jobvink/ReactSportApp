@@ -1,5 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
+var envFile = require('node-env-file');
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+try {
+    envFile(path.join(__dirname, 'config/' + process.env.NODE_ENV + '.env'));
+} catch (e) {
+    console.log(e);
+}
 
 module.exports = {
     entry: [
@@ -14,7 +23,23 @@ module.exports = {
         new webpack.ProvidePlugin({
             '$': 'jquery',
             'jQuery': 'jquery'
-        })
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                API_KEY: JSON.stringify(process.env.API_KEY),
+                AUTH_DOMAIN: JSON.stringify(process.env.AUTH_DOMAIN),
+                DATABASE_URL: JSON.stringify(process.env.DATABASE_URL),
+                PROJECT_ID: JSON.stringify(process.env.PROJECT_ID),
+                STORAGE_BUCKET: JSON.stringify(process.env.STORAGE_BUCKET),
+                MESSAGEING_SENDER_ID: JSON.stringify(process.env.MESSAGEING_SENDER_ID)
+            }
+        }),
+        process.env.NODE_ENV === 'development' ? new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false
+            }
+        }) : null
     ],
     output: {
         path: __dirname,
@@ -52,5 +77,5 @@ module.exports = {
             path.resolve(__dirname, './node_modules/bootstrap/scss')
         ]
     },
-    devtool: 'cheap-module-eval-source-map'
+    devtool: process.env.NODE_ENV === 'production' ? undefined : 'cheap-module-eval-source-map'
 };

@@ -11,6 +11,11 @@ export var hardloopDataReducer = (state = [], action) => {
                 ...state,
                 action.data
             ];
+        case 'ADD_ALL_HARDLOOP_DATA':
+            return [
+                ...state,
+                ...action.data
+            ];
         default:
             return state
     }
@@ -118,6 +123,19 @@ export var profileReducer = (state = {}, action) => {
                 woonplaats: action.woonplaats,
                 werk: action.werk
             };
+        default:
+            return state
+    }
+};
+
+export var authReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'LOGIN':
+            return {
+                uid: action.uid
+            };
+        case 'LOGOUT':
+            return {};
         default:
             return state
     }
