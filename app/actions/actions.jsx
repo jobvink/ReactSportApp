@@ -1,5 +1,5 @@
 var uuid = require('node-uuid');
-import firbase, {firebaseRef, githubProvider} from 'app/firebase/';
+import firbase, {firebaseRef, storageRef, githubProvider} from 'app/firebase/';
 var moment = require('moment');
 
 
@@ -80,6 +80,79 @@ export var clearCount = () => {
     }
 };
 
+
+
+export var startAddSchemas = () => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var schemaRef = firebaseRef.child(`users/${uid}/schemas`);
+        var ReactSchemas = [];
+        return schemaRef.once('value').then((snapshot) => {
+            var schemas = snapshot.val();
+            if(schemas !== null) {
+                var keys = Object.keys(schemas);
+
+                keys.forEach((key) => {
+                    var schema = schemas[key];
+                        var agendaRef = schemaRef.child(`${key}/agendas`);
+                        var ReactAgendas = [];
+                        agendaRef.once('value').then((snapshot) => {
+                            var agendas = snapshot.val();
+                            if (agendas !== null) {
+                                var agendaKeys = Object.keys(agendas);
+                                agendaKeys.forEach((agendaKey) => {
+                                    var agenda = agendas[agendaKey];
+                                    ReactAgendas.push({
+                                        datum: agenda.datum,
+                                        activiteit: agenda.activiteit
+                                    });
+                                });
+                            }
+                        });
+
+                    ReactSchemas.push({
+                        id: schemaRef.key,
+                        name: schema.name,
+                        agenda: ReactAgendas
+                    });
+                });
+                dispatch(addSchemas(ReactSchemas));
+            }
+        });
+    }
+};
+
+export var startAddSchema = (name) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var schemaRef = firebaseRef.child(`users/${uid}/schemas`).push({
+            name: name
+        });
+
+        return schemaRef.then(() => {
+            dispatch(addSchema({
+                name,
+                id: schemaRef.key
+            }));
+        });
+    };
+};
+
+export var startAddAgenda = (id, agenda) => {
+    return (dispatch, getState) => {
+        console.log(id, agenda);
+        var uid = getState().auth.uid;
+        var agendaRef = firebaseRef.child(`users/${uid}/schemas/${id}/agendas`).push({
+            datum: agenda.datum,
+            activiteit: agenda.activiteit
+        });
+
+        return agendaRef.then(() => {
+            dispatch(addAgenda(id, agenda))
+        });
+    }
+};
+
 export var addAgenda = (id, agenda) => {
     return {
         type: 'ADD_AGENDA',
@@ -96,11 +169,17 @@ export var addAgendas = (id, agendas) => {
     }
 };
 
-export var addSchema = (naam) => {
+export var addSchema = (schema) => {
     return {
         type: 'ADD_SCHEMA',
-        id: uuid(),
-        naam
+        schema
+    }
+};
+
+export var addSchemas = (schemas) => {
+    return {
+        type: 'ADD_SCHEMAS',
+        schemas
     }
 };
 
@@ -127,11 +206,72 @@ export var setFinished = (id) => {
     }
 };
 
+export var startAddProfile = () => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var profileRef = firebaseRef.child(`users/${uid}/profile`);
+        var ReactProfile = {};
+        return profileRef.once('value').then((snapshot) => {
+            var ReactProfile = snapshot.val();
+            dispatch(configureProfile(
+                ReactProfile.naam,
+                ReactProfile.geboortedatum,
+                ReactProfile.woonplaats,
+                ReactProfile.werk,
 
-export var configureProfile = (imgPath, naam, geboortedatum, woonplaats, werk) => {
+            ));
+        });
+    }
+}
+
+export var startUpdateProfile = (naam, geboortedatum, woonplaats, werk) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var profileRef = firebaseRef.child(`users/${uid}/profile`).set({
+            naam: naam,
+            geboortedatum: geboortedatum,
+            woonplaats: woonplaats,
+            werk: werk
+        });
+
+        return profileRef.then(() => {
+            dispatch(configureProfile(naam, geboortedatum, woonplaats, werk));
+        });
+    };
+};
+
+export var startUploadingPhoto = (profilefoto) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var photoRef = storageRef.child(`users/${uid}/images`).put(profilefoto);
+
+        return photoRef.then( () => {
+            dispatch(startConfigureProfilePhoto());
+        });
+    };
+};
+
+export var startConfigureProfilePhoto = () => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var photoRef = storageRef.child(`users/${uid}/images`);
+        return photoRef.getDownloadURL().then((url) => {
+            dispatch(configureProfielPhoto(url));
+        });
+    };
+};
+
+export var configureProfielPhoto = (url) => {
+    return {
+        type: 'CONFIGURE_PROFILE_PHOTO',
+        url
+    }
+};
+
+
+export var configureProfile = (naam, geboortedatum, woonplaats, werk) => {
     return {
         type: 'CONFIGURE_PROFILE',
-        imgPath,
         naam,
         geboortedatum,
         woonplaats,

@@ -75,10 +75,14 @@ export var schemaReducer = (state = [], action) => {
             return [
                 ...state,
                 {
-                    id: action.id,
-                    name: action.naam,
+                    ...action.schema,
                     agenda: []
                 }
+            ];
+        case 'ADD_SCHEMAS':
+            return [
+                ...state,
+                ...action.schemas
             ];
         default:
             return state
@@ -117,11 +121,16 @@ export var profileReducer = (state = {}, action) => {
     switch (action.type) {
         case 'CONFIGURE_PROFILE':
             return {
-                imgPath: action.import,
+                ...state,
                 naam: action.naam,
                 geboortedatum: action.geboortedatum,
                 woonplaats: action.woonplaats,
                 werk: action.werk
+            };
+        case 'CONFIGURE_PROFILE_PHOTO':
+            return {
+                ...state,
+                url: action.url
             };
         default:
             return state
