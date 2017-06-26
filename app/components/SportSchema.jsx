@@ -5,6 +5,9 @@ var {connect} = require('react-redux');
 import Table from 'Table';
 
 var SportSchema = React.createClass({
+    handleDelete: function (e) {
+        e.preventDefault();
+    },
     handleSubmit: function (e) {
         e.preventDefault();
 
@@ -39,10 +42,13 @@ var SportSchema = React.createClass({
                     <input type="datetime-local" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="date" id="data" name="date" />
                     <label className="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">Activiteit:</label>
                     <input type="text" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="activiteit" id="activiteit" name="activiteit"/>
-                    <input type="submit" className="btn btn-primary" style={{margin: 0}}/>
+                    <input type="submit" className="btn btn-succes" style={{margin: 0}}/>
                 </form>
                 <br/>
                 {renderAgenda()}
+                <form onSubmit={this.handleDelete} className="form-inline">
+                    <input type="submit" value="Verwijderen" className="btn btn-danger"/>
+                </form>
             </div>
         )
     }

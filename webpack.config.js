@@ -10,6 +10,8 @@ try {
     console.log(e);
 }
 
+console.log(process.env);
+
 module.exports = {
     entry: [
         'script!jquery/dist/jquery.min.js',
