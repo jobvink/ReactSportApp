@@ -13,6 +13,9 @@ firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         store.dispatch(actions.login(user.uid));
         store.dispatch(actions.startAddAllHardloopdata());
+        store.dispatch(actions.startAddSchemas());
+        store.dispatch(actions.startAddProfile());
+        store.dispatch(actions.startConfigureProfilePhoto());
         hashHistory.push('/');
     } else {
         store.dispatch(actions.logout());
@@ -116,7 +119,7 @@ function getRandomArbitrary(min, max) {
 function gd(year, month, day) {
     return new Date(year, month - 1, day).getTime();
 }
-store.dispatch(actions.addSchema('Test schema'));
+
 store.dispatch(actions.setHardloopState('stopped'));
 store.dispatch(actions.setCount(0));
 

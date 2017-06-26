@@ -16,7 +16,7 @@ var Schema = React.createClass({
 
         if (naam.length > 0) {
             this.refs.naam.value = '';
-            dispatch(actions.addSchema(naam));
+            dispatch(actions.startAddSchema(naam));
         }
     },
 	render: function () {
@@ -40,7 +40,7 @@ var Schema = React.createClass({
 								<div className="form-group row">
 									<label className="col-2 col-form-label">Schema naam:</label>
 									<div className="col-10">
-										<input ref="naam" className="form-control" type="text" placeholder="Naam" id="naam" name="naam" />
+										<input required ref="naam" className="form-control" type="text" placeholder="Naam" id="naam" name="naam" />
 									</div>
 								</div>
 								<div className="form-group col-12">

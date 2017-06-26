@@ -1,32 +1,49 @@
 var React = require('react');
-var Image = require('react-image');
+var DOM = require('react-dom');
 var {connect} = require('react-redux');
 var actions = require('actions');
 var moment = require('moment');
 
 import Page from 'Page';
 import Panel from 'Panel';
+import Image from 'react-image';
 
 var Profile = React.createClass({
     handleStateChange: function (e) {
         e.preventDefault();
 
-        var {naam, geboortedatum, woonplaats, werk} = this.refs;
+        var {naam, geboortedatum, woonplaats, werk, file} = this.refs;
 
-        switch (this.state.profileState) {
-           case 'EDIT_MODE':
-           case 'CREATE_MODE':
-               this.setState({
-                   profileState: null
-               });
-               console.log(geboortedatum);
-               this.props.dispatch(actions.configureProfile(null, naam.value, moment(geboortedatum.value), woonplaats.value, werk.value));
-               break;
-           default:
-               this.setState({
-                   profileState: 'EDIT_MODE'
-               });
-       }
+        if(file !== undefined) {
+
+            var profielfoto = file.files[0];
+
+            if (profielfoto !== undefined) {
+                this.props.dispatch(actions.startUploadingPhoto(profielfoto));
+            }
+        }
+        if (naam !== undefined && geboortedatum !== undefined && woonplaats !== undefined && werk !== undefined) {
+            if (naam.value.length > 0 && geboortedatum.value.length > 0 && woonplaats.value.length > 0 && werk.value.length > 0) {
+                switch (this.state.profileState) {
+                    case 'EDIT_MODE':
+                    case 'CREATE_MODE':
+                        this.setState({
+                            profileState: null
+                        });
+                        this.props.dispatch(actions.startUpdateProfile(naam.value, geboortedatum.value, woonplaats.value, werk.value));
+                        break;
+                    default:
+                        this.setState({
+                            profileState: 'EDIT_MODE'
+                        });
+                }
+            }
+        } else {
+            this.setState({
+                profileState: 'EDIT_MODE'
+            })
+        }
+
     },
 
 
@@ -70,23 +87,26 @@ var Profile = React.createClass({
             )
         };
 
-
+        const myComponent = () => {
+            return <Image className="img-thumbnail" src={profile.url} />
+        };
 
         var renderProfile = () => {
             var mode = this.state.profileState;
             switch (mode) {
                 case 'EDIT_MODE':
                     return (<div>
-                        <img className="img-thumbnail" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Profiel foto"/>
+                        {myComponent()}
                         <form onSubmit={this.handleStateChange}>
+                            <input accept="image/*" ref="file" className="form-control" type="file"/>
                             <label>Naam:</label>
-                            <input ref="naam" type="text" className="form-control" defaultValue={profile.naam}/>
+                            <input required ref="naam" type="text" className="form-control" defaultValue={profile.naam}/>
                             <label>Geboortedatum:</label>
-                            <input ref="geboortedatum" type="date" className="form-control"/>
+                            <input required ref="geboortedatum" type="date" className="form-control"/>
                             <label>woonplaars:</label>
-                            <input ref="woonplaats" type="text" className="form-control" defaultValue={profile.woonplaats}/>
+                            <input required ref="woonplaats" type="text" className="form-control" defaultValue={profile.woonplaats}/>
                             <label>werk:</label>
-                            <input ref="werk" type="text" className="form-control" defaultValue={profile.werk}/>
+                            <input required ref="werk" type="text" className="form-control" defaultValue={profile.werk}/>
                             <br/>
                             <input type="submit" className="btn btn-success"/>
                         </form>
@@ -94,32 +114,34 @@ var Profile = React.createClass({
                     break;
                 case 'CREATE_MODE':
                     return (<div>
-                        <img className="img-thumbnail" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Profiel foto"/>
+                        {myComponent()}
                         <form onSubmit={this.handleStateChange}>
+                            <input accept="image/*" ref="file" className="form-control" type="file"/>
                             <label>Naam:</label>
-                            <input ref="naam" type="text" className="form-control"/>
+                            <input required ref="naam" type="text" className="form-control"/>
                             <label>Geboortedatum:</label>
-                            <input ref="geboortedatum" type="date" className="form-control"/>
+                            <input required ref="geboortedatum" type="date" className="form-control"/>
                             <label>woonplaats:</label>
-                            <input ref="woonplaats" type="text" className="form-control"/>
+                            <input required ref="woonplaats" type="text" className="form-control"/>
                             <label>werk:</label>
                             <input ref="werk" type="text" className="form-control"/>
                             <br/>
-                            <input type="submit" className="btn btn-success"/>
+                            <input required type="submit" className="btn btn-success"/>
                         </form>
                     </div>);
                     break;
                 default:
                     return (
                         <div>
-                            <img className="img-thumbnail" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Profiel foto"/>
-                            <h3>{profile.naam}</h3>
+                            {myComponent()}
+                            <h1>{profile.naam}</h1>
                             <br />
                             <table className="h6">
                                 <tbody>
                                 <tr>
                                     <th><i className="fa fa-birthday-cake" /></th>
-                                    <td>{profile.geboortedatum.fromNow(true)}</td>
+                                    {console.log(profile.geboortedatum)}
+                                    <td>{moment().diff(profile.geboortedatum, 'years') + " jaar"}</td>
                                 </tr>
                                 <tr>
                                     <th><i className="fa fa-map-marker" /></th>

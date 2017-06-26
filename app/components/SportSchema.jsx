@@ -17,7 +17,7 @@ var SportSchema = React.createClass({
             this.refs.date.value = '';
             this.refs.activiteit.value = '';
 
-            dispatch(actions.addAgenda(schemaKey, {datum, activiteit}))
+            dispatch(actions.startAddAgenda(schemaKey, {datum, activiteit}))
         }
     },
     render: function () {
@@ -36,13 +36,14 @@ var SportSchema = React.createClass({
             <div>
                 <form onSubmit={this.handleSubmit} className="form-inline">
                     <label className="mr-sm-2">Datum:</label>
-                    <input type="datetime-local" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="date" id="data" name="date" />
+                    <input required type="datetime-local" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="date" id="data" name="date" />
                     <label className="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">Activiteit:</label>
-                    <input type="text" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="activiteit" id="activiteit" name="activiteit"/>
+                    <input required type="text" className="custom-select mb-2 mr-sm-2 mb-sm-0" ref="activiteit" id="activiteit" name="activiteit"/>
                     <input type="submit" className="btn btn-primary" style={{margin: 0}}/>
                 </form>
                 <br/>
                 {renderAgenda()}
+                <br/>
             </div>
         )
     }
