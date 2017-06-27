@@ -7,10 +7,13 @@ import Table from 'Table';
 var SportSchema = React.createClass({
     handleDelete: function (e) {
         e.preventDefault();
-    },
-    handleSubmit: function (e) {
-        e.preventDefault();
 
+        var {dispatch, schemaKey} = this.props;
+        dispatch(actions.startDeleteSchema(schemaKey));
+    },
+handleSubmit: function (e) {
+
+        e.preventDefault();
         var {dispatch, schemaKey} = this.props;
 
         var datum = this.refs.date.value;
@@ -20,15 +23,15 @@ var SportSchema = React.createClass({
             this.refs.date.value = '';
             this.refs.activiteit.value = '';
 
-            dispatch(actions.startAddAgenda(schemaKey, {datum, activiteit}))
+            dispatch(actions.startAddAgenda(schemaKey, datum, activiteit))
         }
     },
     render: function () {
         var {agenda} = this.props;
 
-        var renderAgenda = function () {
+        var renderAgenda = () => {
             if(agenda.length > 0){
-                return <Table data={agenda}/>
+                return <Table schemaKey={this.props.schemaKey} data={agenda}/>
             } else {
                 return <p>Nog geen activiteiten gepland voor deze sport</p>
             }

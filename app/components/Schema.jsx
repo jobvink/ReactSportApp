@@ -23,14 +23,20 @@ var Schema = React.createClass({
 		var {schema} = this.props;
 
 		var renderSchemas = function () {
-			if(schema.length === 0) return null;
-			return schema.map((schema) => {
-				return <Panel key={schema.id} largeTitle={schema.name}><SportSchema schemaKey={schema.id} agenda={schema.agenda}/></Panel>
-			})
+			if(schema.length === 0){
+			    return null;
+            } else if( schema === undefined) {
+			    return null;
+            } else {
+                return schema.map((s) => {
+                    return <Panel key={s.id} largeTitle={s.name}><SportSchema schemaKey={s.id}
+                                                                                        agenda={s.agenda}/></Panel>
+                })
+            }
         };
 
 		return (
-			<div>
+			<div id="Schema">
 				<Page title="Schema">
 					<Panel largeTitle="Maak een niew schema">
 						<div className="jumbotron">
@@ -52,6 +58,7 @@ var Schema = React.createClass({
 					</Panel>
 					{renderSchemas()}
 				</Page>
+				<div style={{clear: "both"}}/>
 			</div>
 		);
 	}

@@ -80,6 +80,24 @@ export var clearCount = () => {
     }
 };
 
+export var startDeleteAgenda = (schema, agenda) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        return firebaseRef.child(`users/${uid}/schemas/${schema}/agendas/${agenda}`).remove().then(() => {
+            dispatch(deleteAgenda(schema, agenda));
+        });
+
+    }
+
+};
+
+export var deleteAgenda = (schema, agenda) => {
+    return {
+        type: 'DELETE_AGENDA',
+        schema,
+        agenda
+    }
+};
 
 
 export var startAddSchemas = () => {
@@ -103,6 +121,7 @@ export var startAddSchemas = () => {
                                 agendaKeys.forEach((agendaKey) => {
                                     var agenda = agendas[agendaKey];
                                     ReactAgendas.push({
+                                        id: agendaKey,
                                         datum: agenda.datum,
                                         activiteit: agenda.activiteit
                                     });
@@ -111,7 +130,7 @@ export var startAddSchemas = () => {
                         });
 
                     ReactSchemas.push({
-                        id: schemaRef.key,
+                        id: key,
                         name: schema.name,
                         agenda: ReactAgendas
                     });
@@ -122,42 +141,57 @@ export var startAddSchemas = () => {
     }
 };
 
+export var startDeleteSchema = (key) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        return firebaseRef.child(`users/${uid}/schemas/${key}`).remove().then(() => {
+            dispatch(deleteSchema(key));
+        });
+    };
+};
+
+export var deleteSchema = (key) => {
+    return {
+        type: 'DELETE_SCHEMA',
+        key
+    }
+};
+
 export var startAddSchema = (name) => {
     return (dispatch, getState) => {
         var uid = getState().auth.uid;
-        var schemaRef = firebaseRef.child(`users/${uid}/schemas`).push({
-            name: name
-        });
+        var schema = {name};
+        var schemaRef = firebaseRef.child(`users/${uid}/schemas`).push(schema);
 
         return schemaRef.then(() => {
             dispatch(addSchema({
-                name,
+                    ...schema,
                 id: schemaRef.key
             }));
         });
     };
 };
 
-export var startAddAgenda = (id, agenda) => {
+export var startAddAgenda = (id, datum, activiteit) => {
     return (dispatch, getState) => {
-        console.log(id, agenda);
         var uid = getState().auth.uid;
         var agendaRef = firebaseRef.child(`users/${uid}/schemas/${id}/agendas`).push({
-            datum: agenda.datum,
-            activiteit: agenda.activiteit
+            datum,
+            activiteit
         });
-
         return agendaRef.then(() => {
-            dispatch(addAgenda(id, agenda))
+            dispatch(addAgenda(id, agendaRef.key, datum, activiteit))
         });
     }
 };
 
-export var addAgenda = (id, agenda) => {
+export var addAgenda = (schema, agenda, datum, activiteit) => {
     return {
         type: 'ADD_AGENDA',
-        id,
-        agenda
+        schema,
+        agenda,
+        datum,
+        activiteit
     }
 };
 

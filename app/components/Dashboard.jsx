@@ -33,20 +33,6 @@ var Dashboard = React.createClass({
             data.push(month);
         }
 
-        var arrSchema = [];
-
-        if (schema.length > 0) {
-            schema.forEach((s) => {
-                s.agenda.forEach((a) => {
-                    let maandVanNu = moment().add(1, 'months').toDate();
-                    let datum = new Date(a.datum).getTime();
-                    if (maandVanNu > datum && datum > new Date()) {
-                        arrSchema.push(a);
-                    }
-                })
-            });
-        }
-
 		var uniqueLegenda = arrLegenda.filter((value, index, self) => {
             return self.indexOf(value) === index;
 		});
@@ -56,9 +42,6 @@ var Dashboard = React.createClass({
 				<Page title="Dashboard">
 					<Panel largeTitle="Hardloop activiteit" smallTitle="laatste 3 maanden">
 						<Chart chartdata={data} chartlegenda={uniqueLegenda}/>
-					</Panel>
-					<Panel largeTitle="Aankomende sport activiteit" smallTitle="1 maand vooruit">
-						<Table data={arrSchema}/>
 					</Panel>
 				</Page>
 			</div>

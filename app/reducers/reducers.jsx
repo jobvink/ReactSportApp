@@ -45,12 +45,17 @@ export var schemaReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD_AGENDA':
             return state.map((s) => {
-                if (s.id === action.id) {
+                // debugger;
+                if (s.id === action.schema) {
                     return {
                         ...s,
                         agenda: [
                             ...s.agenda,
-                            action.agenda
+                            {
+                                id: action.agenda,
+                                datum: action.datum,
+                                activiteit: action.activiteit
+                            }
                         ]
                     }
                 } else {
@@ -59,13 +64,26 @@ export var schemaReducer = (state = [], action) => {
             });
         case 'ADD_AGENDAS':
             return state.map((s) => {
-                if (s.id === action.id) {
+                if (s.id === action.schema) {
                     return {
                         ...s,
                         agenda: [
                             ...s.agenda,
                             ...action.agendas
                         ]
+                    }
+                } else {
+                    return s
+                }
+            });
+        case 'DELETE_AGENDA':
+            return state.map((s) => {
+                if (s.id === action.schema) {
+                    return {
+                        ...s,
+                        agenda: s.agenda.filter((a) => {
+                                return a.id !== action.agenda
+                        })
                     }
                 } else {
                     return s
@@ -84,6 +102,10 @@ export var schemaReducer = (state = [], action) => {
                 ...state,
                 ...action.schemas
             ];
+        case 'DELETE_SCHEMA':
+            return state.filter((schema) => {
+                return (schema.id !== action.key)
+            });
         default:
             return state
     }

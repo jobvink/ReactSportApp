@@ -1,15 +1,25 @@
 var React = require('react');
 var moment = require('moment');
+var actions = require('actions');
+var {connect} = require('react-redux');
+
+import Row from 'Row';
+
 
 export var Table = React.createClass({
+    handleDelete: function (e) {
+        e.preventDefault();
+        console.log();
+        var m = e.dispatchMarker;
+        // var schemakey = m.slice(m.indexOf('$')+1,m.indexOf('.', m.indexOf('$')));
+        // var agendaKey = m.slice(m.indexOf('$', m.indexOf(schemakey) + schemakey.length)+1,m.indexOf('.', m.indexOf('$'),m.indexOf(schemakey) + schemakey.length));
+        // console.log(schemakey);
+        // console.log(agendaKey);
+
+    },
     renderTableRow: function (key, te) {
-        var datum = moment(te.datum).local('nl');
         return (
-            <tr key={key}>
-                <th>{datum.format('D MMMM YYYY')}</th>
-                <th>{datum.format('HH:mm')}</th>
-                <th>{te.activiteit}</th>
-            </tr>
+            <Row schemaKey={this.props.schemaKey} agendaKey={te.id} key={key} data={te} />
         )
     },
     renderTableBody: function () {
@@ -39,4 +49,10 @@ export var Table = React.createClass({
     }
 });
 
-export default Table;
+export default connect(
+    (state) => {
+        return {
+            state
+        }
+    }
+)(Table);
