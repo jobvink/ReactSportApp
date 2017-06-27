@@ -8,7 +8,7 @@ import Page from 'Page';
 import Panel from 'Panel';
 import Image from 'react-image';
 
-var Profile = React.createClass({
+export var Profile = React.createClass({
     handleStateChange: function (e) {
         e.preventDefault();
 
