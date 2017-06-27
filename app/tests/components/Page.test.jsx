@@ -11,4 +11,7 @@ describe('Page', () => {
 	it('Zou moeten bestaan', () => {
 		expect(Page).toExist();
 	});
+
+
+
 });

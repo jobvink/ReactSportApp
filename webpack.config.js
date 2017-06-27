@@ -10,8 +10,6 @@ try {
     console.log(e);
 }
 
-console.log(process.env);
-
 module.exports = {
     entry: [
         'script!jquery/dist/jquery.min.js',
@@ -37,11 +35,11 @@ module.exports = {
                 MESSAGEING_SENDER_ID: JSON.stringify(process.env.MESSAGEING_SENDER_ID)
             }
         }),
-        process.env.NODE_ENV === 'development' ? new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                warnings: false
-            }
-        }) : null
+        // process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' ? null : new webpack.optimize.UglifyJsPlugin({
+        //     compressor: {
+        //         warnings: false
+        //     }
+        // })
     ],
     output: {
         path: __dirname,

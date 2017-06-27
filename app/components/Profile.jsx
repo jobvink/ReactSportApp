@@ -140,7 +140,6 @@ export var Profile = React.createClass({
                                 <tbody>
                                 <tr>
                                     <th><i className="fa fa-birthday-cake" /></th>
-                                    {console.log(profile.geboortedatum)}
                                     <td>{moment().diff(profile.geboortedatum, 'years') + " jaar"}</td>
                                 </tr>
                                 <tr>

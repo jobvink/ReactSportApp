@@ -4,7 +4,9 @@ var TestUtils = require('react-addons-test-utils');
 var expect = require('expect');
 var $ = require('jquery');
 
+
 import * as actions from 'actions';
+var {trophys} = require('../../trophy');
 var {Profile} = require('Profile');
 
 describe('Profile', () => {
@@ -12,20 +14,60 @@ describe('Profile', () => {
 		expect(Profile).toExist();
 	});
 
-	it('Zou CONFIGURE_PROFILE_PHOTO moeten dispatchen met valide data', () => {
-		var foto = new File([""], '../../utils/img/profile.png');
-		var action = actions.configureProfielPhoto()
-		var spy = expect.createSpy();
-		var Profile = TestUtils.renderIntoDocument(<Profile dispatch={spy}/>);
-		var $el = $(ReactDOM.findDOMNode(Profile));
+	describe('Trophies', () => {
+		it('Zou het goede aantal tropheen moeten laden', () => {
+		    var t = [];
+            Object.keys(trophys).forEach((key) => {
+		        let trophy = trophys[key];
+                t.push({
+                    id: trophy.id,
+                    title: trophy.title,
+                    description: trophy.description,
+                    finished: false
+                });
+            });
+            let Profiel = TestUtils.renderIntoDocument(
+		        <Profile trophys={t} profile={{
+                    naam: 'Test naam',
+                    geboortedatum: new Date(),
+                    woonplaats: 'Test woonplaats',
+                    werk: 'Test baan',
+                    url: 'https://firebasestorage.googleapis.com/v0/b/reactsportapptest.appspot.com/o/profile-placeholder.gif?alt=media&token=f48fc36d-bd98-4b84-a9af-8cf5df22de0b'
+                }}/>
+            );
+            let $el = $(ReactDOM.findDOMNode(Profiel));
+            let $achievements = $el.find('#achievements');
 
-		Profile.setState({
-			profileState: 'EDIT_MODE'
-		});
-		Profile.refs.file.files[0] = foto;
-		TestUtils.Simulate.submit($el.find('form')[0]);
+            expect($achievements.children().length).toBe(Object.keys(trophys).length);
+        });
 
-		expect(spy).toHaveBeenCalledWith(action);
+        it('Zou het goede aantal trofeen behaald moeten zetten', () => {
+            var t = [];
+            Object.keys(trophys).forEach((key) => {
+                let trophy = trophys[key];
+                t.push({
+                    id: trophy.id,
+                    title: trophy.title,
+                    description: trophy.description,
+                    finished: false
+                });
+            });
+            t[0].finished = true;
+            t[3].finished = true;
+            let Profiel = TestUtils.renderIntoDocument(
+                <Profile trophys={t} profile={{
+                    naam: 'Test naam',
+                    geboortedatum: new Date(),
+                    woonplaats: 'Test woonplaats',
+                    werk: 'Test baan',
+                    url: 'https://firebasestorage.googleapis.com/v0/b/reactsportapptest.appspot.com/o/profile-placeholder.gif?alt=media&token=f48fc36d-bd98-4b84-a9af-8cf5df22de0b'
+                }}/>
+            );
+            let $el = $(ReactDOM.findDOMNode(Profiel));
+            let $achievements = $el.find('.finished');
+
+            expect($achievements.length).toBe(2);
+        })
 	});
 
 });
