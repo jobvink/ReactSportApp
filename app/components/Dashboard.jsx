@@ -37,11 +37,52 @@ var Dashboard = React.createClass({
             return self.indexOf(value) === index;
 		});
 
+		var agenda = [];
+		schema.forEach((entry) => {
+			console.log('entry: ', entry.agenda);
+			entry.agenda.forEach((data) => {
+				console.log('data: ', data);
+				var datum = moment(data.datum).local('nl');
+				agenda.push({
+					datum: datum.format('D MMMM YYYY'),
+					tijd: datum.format('HH:mm'),
+					activiteit: data.activiteit,
+					key: data.id
+				});
+			});
+		});
+
+		console.log('agenda: ', agenda);
+
+		var renderRows = () => {
+			return agenda.map((data) => {
+				return (
+					<tr key={data.key}>
+						<td>{data.datum}</td>
+						<td>{data.tijd}</td>
+						<td>{data.activiteit}</td>
+					</tr>
+				)
+			});
+		};
+
 		return (
 			<div>
 				<Page title="Dashboard">
 					<Panel largeTitle="Hardloop activiteit" smallTitle="laatste 3 maanden">
 						<Chart chartdata={data} chartlegenda={uniqueLegenda}/>
+					</Panel>
+					<Panel largeTitle="Agenda" >
+						<table className="table table-striped">
+							<thead>
+								<td>Datum:</td>
+								<td>Tijd:</td>
+								<td>Activiteit</td>
+							</thead>
+							<tbody>
+							{renderRows()}
+							</tbody>
+						</table>
 					</Panel>
 				</Page>
 			</div>

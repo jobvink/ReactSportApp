@@ -27,7 +27,6 @@ var {trophys} = require('app/trophy');
 
 
 var checkTrophys = (userTrophys, state) => {
-    console.log('checking for trophys');
     userTrophys.forEach((trophy) => {
         if(!trophy.finnished) {
             var finished = trophys[trophy.id].condition(state);
